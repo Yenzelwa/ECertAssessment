@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Index";
+
+}
+
+<h3><i class="fa fa-user"></i> Products</h3>
+<div class="form-group row">
+
+
+    <div class="col-lg-2">
+        <a asp-action="Create" class="btn btn-primary" id="btn-add"><i class="fa fa-plus icon-white"></i> Add Product</a>
+    </div>
+</div>
+<div style="width:90%; margin:0 auto;">
+    <table id="myTable" class="table table-striped" border="0" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Product Code</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>CreatedBy</th>
+                <th>DateCreated</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+<script>
+    $(document).ready(function () {
+        var table;
+
+        table = $("#myTable").DataTable({
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            paging: true,
+            pageLength: 10,
+            autoWidth: true,
+            lengthChange: false,
+            searching: { regex: true },
+            Dom: "<'row'<'col-sm-6'><'col-sm-6'f>r>t<'row'<'col-sm-6'i><'col-sm-6'>>",
+            ajax: {
+                "url": "/Product/GetData",
+                "type": "POST",
+                "contentType": "application/json",
+                "datatype": "json",
+                data: function (data) {
+                    debugger;
+                    var dtParameters = JSON.stringify(data);
+                    return dtParameters;
+                }
+            },
+            columns: [{
+                "data": "productId"
+            },
+            {
+                "data": "name",
+                "name": "name",
+                "autoWidth": true
+            },
+            {
+                "data": "productCode",
+                "name": "productCode",
+                "autoWidth": true
+                },
+                {
+                    "data": "category",
+                    "name": "category",
+                    "autoWidth": true
+                },
+            {
+                "data": "description",
+                "name": "description",
+                "autoWidth": true
+                },
+                {
+                    "data": "price",
+                    "name": "price",
+                    "autoWidth": true
+                },
+                {
+                    "data": "createdByUser",
+                    "name": "createdByUser",
+                    "autoWidth": true
+                },
+                {
+                    "data": "dateCreated",
+                    "name": "dateCreated",
+                    "autoWidth": true
+                },
+
+            ],
+            aoColumnDefs: [{
+                /* Override column behaviour */
+                "bSortable": false,
+                "aTargets": [0],
+                "mRender": function (data, type, full) {
+
+                    return "<div class='btn-group' style='display: inline-block;float: none;clear: none;'><a href=/Product/Edit/" +
+                        full.productId +
+                        " class='btn btn-primary btn-xs'  style='display: inline-block;float: none;clear: none;'>Edit</a></div>"
+                }
+            },],
+        })
+
+    });
+</script>
